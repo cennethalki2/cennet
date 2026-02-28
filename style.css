@@ -1,0 +1,172 @@
+:root {
+  color-scheme: dark;
+  --bg: #080b16;
+  --card: #111628;
+  --text: #edf1ff;
+  --muted: #a8b3d1;
+  --primary: #5b8cff;
+  --primary-strong: #3f72f0;
+  --danger: #ff607e;
+  --ok: #6ef0aa;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: radial-gradient(circle at top, #1a2452, var(--bg) 50%);
+  color: var(--text);
+}
+
+.page {
+  width: min(960px, 92vw);
+  margin: 2.5rem auto;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.card {
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.hero {
+  padding: clamp(1.4rem, 4vw, 2.4rem);
+}
+
+.badge {
+  display: inline-block;
+  margin: 0;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: rgba(91, 140, 255, 0.18);
+  color: #cbd9ff;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  margin: 0.8rem 0 0.6rem;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-top: 0;
+  margin-bottom: 1.3rem;
+}
+
+.download-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.7rem;
+}
+
+input,
+button {
+  height: 3rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font: inherit;
+}
+
+input {
+  padding: 0 0.95rem;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+button {
+  padding: 0 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(180deg, var(--primary), var(--primary-strong));
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(91, 140, 255, 0.45);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.message {
+  min-height: 2rem;
+  margin-top: 0.85rem;
+  color: var(--muted);
+}
+
+.message.error {
+  color: var(--danger);
+}
+
+.message.success {
+  color: var(--ok);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.features .card {
+  padding: 1.1rem 1.2rem;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+ol,
+ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.footer {
+  color: #93a0c5;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .download-form {
+    grid-template-columns: 1fr;
+  }
+}
