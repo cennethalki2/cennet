@@ -174,3 +174,26 @@ ul {
     grid-template-columns: 1fr;
   }
 }
+
+.downloads {
+  margin-top: 0.8rem;
+  padding: 0.7rem 1rem;
+}
+
+.downloads li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  list-style: none;
+}
+
+.downloads li:last-child {
+  border-bottom: 0;
+}
+
+.downloads a {
+  color: #cfe0ff;
+}

@@ -19,7 +19,7 @@ export default function HomePage() {
   const [videoUrl, setVideoUrl] = useState("");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
-  const [downloadUrl, setDownloadUrl] = useState("");
+  const [downloadCandidates, setDownloadCandidates] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event) {
@@ -30,31 +30,52 @@ export default function HomePage() {
     if (!trimmed) {
       setMessage("Please paste a Facebook video or Reel link.");
       setMessageType("error");
-      setDownloadUrl("");
+      setDownloadCandidates([]);
       return;
     }
 
     if (!isFacebookUrl(trimmed)) {
       setMessage("That does not look like a Facebook URL.");
       setMessageType("error");
-      setDownloadUrl("");
+      setDownloadCandidates([]);
       return;
     }
 
     setIsSubmitting(true);
-    setMessage("Processing your link...");
+    setMessage("Fetching links from RapidAPI...");
     setMessageType("");
-    setDownloadUrl("");
+    setDownloadCandidates([]);
 
-    await new Promise((resolve) => setTimeout(resolve, 850));
+    try {
+      const response = await fetch(`/api/download?url=${encodeURIComponent(trimmed)}`);
+      const payload = await response.json();
 
-    const encoded = encodeURIComponent(trimmed);
-    const generated = `/api/download?url=${encoded}`;
+      if (!response.ok) {
+        setMessage(payload.error || "Unable to fetch download links.");
+        setMessageType("error");
+        setDownloadCandidates([]);
+        return;
+      }
 
-    setMessage("Download link generated.");
-    setMessageType("success");
-    setDownloadUrl(generated);
-    setIsSubmitting(false);
+      const links = Array.isArray(payload.downloadCandidates) ? payload.downloadCandidates : [];
+
+      if (links.length === 0) {
+        setMessage("No direct links were returned for this URL.");
+        setMessageType("error");
+        setDownloadCandidates([]);
+        return;
+      }
+
+      setMessage("Download links generated.");
+      setMessageType("success");
+      setDownloadCandidates(links);
+    } catch {
+      setMessage("Network error while contacting the downloader service.");
+      setMessageType("error");
+      setDownloadCandidates([]);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -63,7 +84,7 @@ export default function HomePage() {
         <p className="badge">Fast • Free • No Login</p>
         <h1>Download Facebook Videos &amp; Reels</h1>
         <p className="subtitle">
-          Paste a public Facebook video or Reel link and generate a download link in seconds.
+          Paste a public Facebook video or Reel link and generate download links in seconds.
         </p>
 
         <form className="download-form" onSubmit={handleSubmit} noValidate>
@@ -86,14 +107,21 @@ export default function HomePage() {
         </form>
 
         <div className={`message ${messageType}`.trim()} role="status" aria-live="polite">
-          {downloadUrl ? (
-            <>
-              {message} <a href={downloadUrl}>Download video</a>
-            </>
-          ) : (
-            message
-          )}
+          {message}
         </div>
+
+        {downloadCandidates.length > 0 ? (
+          <ul className="downloads card">
+            {downloadCandidates.map((item, index) => (
+              <li key={`${item.url}-${index}`}>
+                <span>{item.quality || "unknown"}</span>
+                <a href={item.url} target="_blank" rel="noopener noreferrer">
+                  Download
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </header>
 
       <section className="features">
@@ -102,16 +130,16 @@ export default function HomePage() {
           <ol>
             <li>Copy a public Facebook video/Reel URL.</li>
             <li>Paste it in the field above.</li>
-            <li>Click <strong>Get Download Link</strong> and save the file.</li>
+            <li>Click <strong>Get Download Link</strong> and pick a quality.</li>
           </ol>
         </article>
 
         <article className="card">
           <h2>Why users like it</h2>
           <ul>
-            <li>Supports standard videos and Reels.</li>
+            <li>Powered by RapidAPI integration.</li>
             <li>Mobile and desktop friendly interface.</li>
-            <li>No account required.</li>
+            <li>No account required for this website.</li>
           </ul>
         </article>
       </section>
