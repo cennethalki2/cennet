@@ -115,6 +115,10 @@ button:disabled {
   color: var(--muted);
 }
 
+.message a {
+  color: #cfe0ff;
+}
+
 .message.error {
   color: var(--danger);
 }
